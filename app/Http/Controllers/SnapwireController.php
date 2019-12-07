@@ -55,8 +55,11 @@ class SnapwireController extends Controller
   public function open_sales(Request $request, $id=null){
     $sales = file_get_contents( "sales.json");
 
-    if( $sales && sizeof($sales))
+    if( $sales && sizeof($sales)){
+      return response()->json(['msg'=>' read sales']);
+
       return response()->json($sales);
+    }
     else
       return response()->json(['msg'=>'cannot read sales']);
   }
