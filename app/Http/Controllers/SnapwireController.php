@@ -53,6 +53,9 @@ class SnapwireController extends Controller
   }
 
   public function open_sales(Request $request, $id=null){
+    error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
     $sales = get_file_contents( "sales.json");
     if( $sales && sizeof($sales))
       return \response()->json("sales");
