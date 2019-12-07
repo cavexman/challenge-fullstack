@@ -56,11 +56,13 @@ class SnapwireController extends Controller
     error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
+    return response()->json(['msg' => 'open']);
+
     $sales = get_file_contents( "sales.json");
     if( $sales && sizeof($sales))
-      return \response()->json("sales");
+      return response()->json("sales");
     else
-      return \response()->json(['msg'=>'cannot read sales']);
+      return response()->json(['msg'=>'cannot read sales']);
   }
     
 
