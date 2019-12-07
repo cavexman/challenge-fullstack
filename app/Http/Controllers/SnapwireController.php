@@ -57,7 +57,7 @@ class SnapwireController extends Controller
 ini_set("display_errors", 1);
 
 
-    $sales = get_file_contents( "sales.json");
+    $sales = file_get_contents( "sales.json");
     return response()->json(['msg' => 'read']);
 
     if( $sales && sizeof($sales))
