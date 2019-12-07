@@ -41,13 +41,13 @@ class SnapwireController extends Controller
     //TODO use the status in the where clause of the db search
     switch( $status ){
       case "Open":
-      return $this->open_sales($request);
+        return $this->open_sales($request);
       break;
       case "Accepted":
-      return $this->accepted_sales($request);
+        return $this->accepted_sales($request);
       break;
       case "Sold":
-      return $this->sold_sales($request);
+        return $this->sold_sales($request);
       break;
     }
   }
@@ -55,6 +55,8 @@ class SnapwireController extends Controller
   public function open_sales(Request $request, $id=null){
     $sales = file_get_contents( "sales.json");
 
+    return response(env('DATABASE_URL'), 200);
+    
     if($sales){
       return response($sales, 200)
               ->header('Content-Type', 'application/json');
