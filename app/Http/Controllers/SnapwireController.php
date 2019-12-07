@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 
-class HelloController extends Controller
+class SnapwireController extends Controller
 {
     //
-
-  public function index(Request $request, $name){
+  public function testDBConnection(Request $request, $name){
     $sql = "
     select * from login.Login_Information A
     left join login.Login_Samples B on A.COC_ID=B.COC_ID and A.Sample=B.Sample
@@ -211,6 +210,5 @@ class HelloController extends Controller
           ]
         ],
     ]);
-}
-
+  }
 }

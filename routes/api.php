@@ -17,6 +17,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('transactions/{status}', 'HelloController@transactions');
-Route::get('opensales/', 'HelloController@open_sales');
-Route::get('opensales/{id}', 'HelloController@open_sales');
+Route::get('transactions/{status}', 'SnapwireController@transactions');
+Route::get('opensales/', 'SnapwireController@open_sales');
+Route::get('opensales/{id}', 'SnapwireController@open_sales');
