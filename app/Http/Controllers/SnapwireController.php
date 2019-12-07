@@ -53,50 +53,11 @@ class SnapwireController extends Controller
   }
 
   public function open_sales(Request $request, $id=null){
-    return response()->json([
-      [
-          'name' => 'Bob',
-          'imageUrl' => 'https://images.snapwi.re/aa27/53765186d79bb29c37976335.w314.jpg',
-          'status' => 'Open',
-          'price' => '999.00',
-          'transaction' => new \ArrayObject()
-      ],
-      [
-          'name' => 'Sally',
-          'imageUrl' => 'https://images.snapwi.re/e337/5381b8015411150d2bcb63c1.w800.jpg',
-          'status' => 'Open',
-          'price' => '15.00',
-          'transaction' => new \ArrayObject()
-      ],
-      [
-          'name' => 'Bob',
-          'imageUrl' => 'https://images.snapwi.re/e337/5381b8015411150d2bcb63c1.w800.jpg',
-          'status' => 'Open',
-          'price' => '5.00',
-          'transaction' => new \ArrayObject()
-          ],
-          [
-              'name' => 'Sally',
-              'imageUrl' => 'https://images.snapwi.re/aa27/53765186d79bb29c37976335.w314.jpg',
-              'status' => 'Open',
-              'price' => '15.00',
-              'transaction' => new \ArrayObject()
-          ],
-          [
-              'name' => 'Bob',
-              'imageUrl' => 'https://images.snapwi.re/aa27/53765186d79bb29c37976335.w314.jpg',
-              'status' => 'Open',
-              'price' => '5.00',
-              'transaction' => new \ArrayObject()
-              ],
-              [
-                  'name' => 'Sally',
-                  'imageUrl' => 'https://images.snapwi.re/e337/5381b8015411150d2bcb63c1.w800.jpg',
-                  'status' => 'Open',
-                  'price' => '15.00',
-                  'transaction' => new \ArrayObject()
-              ],
-  ]);
+    $sales = get_file_contents( "sales.json");
+    if( $sales && sizeof($sales))
+      return \response()->json("sales");
+    else
+      return \response()->json(['msg'=>'cannot read sales']);
   }
     
 
