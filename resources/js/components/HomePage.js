@@ -53,7 +53,7 @@ export default class HomePage extends Component {
       },
       Sold: {
         component: SalesView,
-        endpoint: "/sales.json",
+        endpoint: "/api/transactions/Sold",
         filter: "Sold",
         button_label: "", //sold view has no accept/sell button
         nextStatus: "" //no button, so no new state

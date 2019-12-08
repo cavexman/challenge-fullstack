@@ -1,4 +1,5 @@
-[{"name" : "Bob",    "imageUrl" : "images.snapwi.re/aa27/53765186d79bb29c37976335.w314.jpg",    "status" : "Open",    "price" : "999.00","transaction" : {}},
+[
+  {"name" : "Bob",    "imageUrl" : "images.snapwi.re/aa27/53765186d79bb29c37976335.w314.jpg",    "status" : "Open",    "price" : "999.00","transaction" : {}},
   {"name" : "Sally","imageUrl" : "https://images.snapwi.re/e337/5381b8015411150d2bcb63c1.w800.jpg","status" : "Open","price" : "15.00","transaction" : {}},
   {
     "name" : "Bob",

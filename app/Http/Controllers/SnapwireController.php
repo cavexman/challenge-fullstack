@@ -96,67 +96,20 @@ class SnapwireController extends Controller
   }
 
   public function sold_sales(Request $request, $id=null){
-    return response()->json([
-        [
-            'name' => 'Bob',
-            'imageUrl' => 'https://images.snapwi.re/aa27/53765186d79bb29c37976335.w314.jpg',
-            'status' => 'Sold',
-            'price' => '999.00',
-            'transaction' => [ 
-              "buyerName" => "Jim",
-              "salePrice" => "3.50"
-            ]
-        ],
-        [
-            'name' => 'Sally',
-            'imageUrl' => 'https://images.snapwi.re/e337/5381b8015411150d2bcb63c1.w800.jpg',
-            'status' => 'Sold',
-            'price' => '15.00',
-            'transaction' => [ 
-              "buyerName" => "Jim",
-              "salePrice" => "3.50"
-            ]
-        ],
-        [
-          'name' => 'Bob',
-          'imageUrl' => 'https://images.snapwi.re/e337/5381b8015411150d2bcb63c1.w800.jpg',
-          'status' => 'Sold',
-          'price' => '5.00',
-          'transaction' => [ 
-            "buyerName" => "Jim",
-            "salePrice" => "3.50"
-          ]
-        ],
-        [
-            'name' => 'Sally',
-            'imageUrl' => 'https://images.snapwi.re/aa27/53765186d79bb29c37976335.w314.jpg',
-            'status' => 'Sold',
-            'price' => '15.00',
-            'transaction' => [ 
-              "buyerName" => "Jim",
-              "salePrice" => "3.50"
-            ]
-        ],
-        [
-          'name' => 'Bob',
-          'imageUrl' => 'https://images.snapwi.re/aa27/53765186d79bb29c37976335.w314.jpg',
-          'status' => 'Sold',
-          'price' => '5.00',
-          'transaction' => [ 
-            "buyerName" => "Jim",
-            "salePrice" => "3.50"
-          ]
-        ],
-        [
-          'name' => 'Sally',
-          'imageUrl' => 'https://images.snapwi.re/e337/5381b8015411150d2bcb63c1.w800.jpg',
-          'status' => 'Sold',
-          'price' => '15.00',
-          'transaction' => [ 
-            "buyerName" => "Jim",
-            "salePrice" => "3.50"
-          ]
-        ],
-    ]);
+    $sales = array();
+    $query = "select * from sales where j @> '{\"status\":\"Sold\"}';";
+    $results = DB::select($query);
+    if($results){
+      $rows = array_column($results, 'j');
+      //psql is giving us an array of objects represented as json strings 
+      //we really want to return a json document that is an array of all rows
+      //so we need to iterate the rows and add to a single coherent array
+      //TODO need to see if we can get psql to return a single json document to a query
+      foreach( $rows as $row){
+        $sales [] = json_decode($row, true);//tempting to just stack the strings into the document and skip this encode/decode
+      }
+    }
+    return response(json_encode($sales), 200)
+    ->header('Content-Type', 'application/json');
   }
 }
