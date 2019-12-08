@@ -87,11 +87,11 @@ class SnapwireController extends Controller
       //psql is giving us an array of objects represented as json strings 
       //we really want to return a json document that is an array of all rows
       //so we need to iterate the rows and add to a single coherent array
-      //need to see if we can get psql to return a single json document to a query
+      //TODO need to see if we can get psql to return a single json document to a query
       foreach( $rows as $row){
         $sales [] = json_decode($row, true);
       }
-      var_dump($sales);
+      var_dump($sales[0]["name"]);
       echo json_encode($sales);
     }
     return response(json_encode($sales), 200)
