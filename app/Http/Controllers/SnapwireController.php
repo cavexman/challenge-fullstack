@@ -19,6 +19,18 @@ class SnapwireController extends Controller
     var_dump($results);
   }
   
+  public function ingest(){
+    $sales = file_get_contents("sales.json");
+    if($sales){
+      $json = json_decode($sales);
+      foreach($json as $row){
+        $sql = "INSERT INTO sales VALUES
+        ('UA502', 'Bananas', 105, '1971-07-13', 'Comedy', '82 minutes');";
+      }
+    }
+
+  }
+
   public function testDBConnection(Request $request, $name){
     $sql = "
     select * from login.Login_Information A
@@ -79,50 +91,11 @@ class SnapwireController extends Controller
     
 
   public function accepted_sales(Request $request, $id=null){
-    return response()->json([
-      [
-          'name' => 'Bob',
-          'imageUrl' => 'https://images.snapwi.re/aa27/53765186d79bb29c37976335.w314.jpg',
-          'status' => 'Accepted',
-          'price' => '999.00',
-          'transaction' => new \ArrayObject()
-      ],
-      [
-          'name' => 'Sally',
-          'imageUrl' => 'https://images.snapwi.re/e337/5381b8015411150d2bcb63c1.w800.jpg',
-          'status' => 'Accepted',
-          'price' => '15.00',
-          'transaction' => new \ArrayObject()
-      ],
-      [
-          'name' => 'Bob',
-          'imageUrl' => 'https://images.snapwi.re/e337/5381b8015411150d2bcb63c1.w800.jpg',
-          'status' => 'Accepted',
-          'price' => '5.00',
-          'transaction' => new \ArrayObject()
-          ],
-          [
-              'name' => 'Sally',
-              'imageUrl' => 'https://images.snapwi.re/aa27/53765186d79bb29c37976335.w314.jpg',
-              'status' => 'Accepted',
-              'price' => '15.00',
-              'transaction' => new \ArrayObject()
-          ],
-          [
-              'name' => 'Bob',
-              'imageUrl' => 'https://images.snapwi.re/aa27/53765186d79bb29c37976335.w314.jpg',
-              'status' => 'Accepted',
-              'price' => '5.00',
-              'transaction' => new \ArrayObject()
-              ],
-              [
-                  'name' => 'Sally',
-                  'imageUrl' => 'https://images.snapwi.re/e337/5381b8015411150d2bcb63c1.w800.jpg',
-                  'status' => 'Accepted',
-                  'price' => '15.00',
-                  'transaction' => new \ArrayObject()
-              ],
-  ]);
+    $query = "select * from sales where j @> '{\"status\":\"Accepted\"}';";
+    $results = DB::select($sql);
+    var_dump($results);
+    return response($results, 200)
+    ->header('Content-Type', 'application/json');
   }
 
   public function sold_sales(Request $request, $id=null){
