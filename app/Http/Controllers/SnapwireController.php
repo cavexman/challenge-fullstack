@@ -66,8 +66,6 @@ class SnapwireController extends Controller
   public function open_sales(Request $request, $id=null){
     $sales = file_get_contents( "sales.json");
 
-    return response(env('DATABASE_URL'), 200);
-
     if($sales){
       return response($sales, 200)
               ->header('Content-Type', 'application/json');
@@ -78,21 +76,24 @@ class SnapwireController extends Controller
   }
     
 
+  //we would be better off decode json and normalizing it in the db at ingest time
   public function accepted_sales(Request $request, $id=null){
-    $sales = array();
+    $sales = "[";
     $query = "select * from sales where j @> '{\"status\":\"Accepted\"}';";
     $results = DB::select($query);
     if($results){
-      $rows = array_column($results, 'j');
       //psql is giving us an array of objects represented as json strings 
       //we really want to return a json document that is an array of all rows
       //so we need to iterate the rows and add to a single coherent array
       //TODO need to see if we can get psql to return a single json document to a query
-      foreach( $rows as $row){
-        $sales [] = json_decode($row, true);
+      $addFieldSeparator = false;
+      foreach( $results as $row){
+        if($addFieldSeparator)
+          $sales .= ",";
+        $sales .= $row["j"]; //tempting to just stack the strings into the document and skip this encode/decode cycle
+        $addFieldSeparator = true;
       }
-      var_dump($sales[0]["name"]);
-      echo json_encode($sales);
+      $sales .= "]";
     }
     return response(json_encode($sales), 200)
     ->header('Content-Type', 'application/json');
