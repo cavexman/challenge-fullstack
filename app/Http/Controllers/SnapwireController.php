@@ -80,8 +80,10 @@ class SnapwireController extends Controller
   public function accepted_sales(Request $request, $id=null){
     $sales = "[";
     $query = "select * from sales where j @> '{\"status\":\"Accepted\"}';";
+    echo $query;
     $results = DB::select($query);
     if($results){
+      echo "got results";
       //psql is giving us an array of objects represented as json strings 
       //we really want to return a json document that is an array of all rows
       //so we need to iterate the rows and add to a single coherent array
