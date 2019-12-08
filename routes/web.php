@@ -12,8 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 
 Route::get('hello/{name}', 'HelloController@index');
-Route::get('createdb', 'SnapwireController@createDB');
+Route::get('createdb', 'HelloController@createDB');
