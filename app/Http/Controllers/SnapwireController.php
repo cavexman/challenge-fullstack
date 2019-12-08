@@ -93,8 +93,8 @@ class SnapwireController extends Controller
   public function accepted_sales(Request $request, $id=null){
     $query = "select * from sales where j @> '{\"status\":\"Accepted\"}';";
     $results = DB::select($sql);
-    var_dump($results);
-    return response($results, 200)
+    // var_dump($results);
+    return response("{}", 200)
     ->header('Content-Type', 'application/json');
   }
 
