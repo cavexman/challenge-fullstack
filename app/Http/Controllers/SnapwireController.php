@@ -88,6 +88,7 @@ class SnapwireController extends Controller
       //TODO need to see if we can get psql to return a single json document to a query
       $addFieldSeparator = false;
       foreach( $results as $row){
+        echo $row["j"];
         if($addFieldSeparator)
           $sales .= ",";
         $sales .= $row["j"]; //tempting to just stack the strings into the document and skip this encode/decode cycle
