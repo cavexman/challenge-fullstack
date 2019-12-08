@@ -95,7 +95,7 @@ class SnapwireController extends Controller
       }
       $sales .= "]";
     }
-    return response(json_encode($sales), 200)
+    return response($sales, 200)
     ->header('Content-Type', 'application/json');
   }
 
