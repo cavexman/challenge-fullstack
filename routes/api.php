@@ -20,3 +20,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('transactions/{status}', 'SnapwireController@transactions');
 Route::get('opensales/', 'SnapwireController@open_sales');
 Route::get('opensales/{id}', 'SnapwireController@open_sales');
+Route::get('acceptedsales/{id}', 'SnapwireController@accepted_sales');
