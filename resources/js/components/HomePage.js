@@ -6,7 +6,7 @@ import SalesView from './SalesView'
 function Header(props){
   return(
     <div className="Header">
-      <img className="Header__logo" src="sw-logo-icon2x.png" alt="Snapwire"/><span className="Header__title">Snapwire</span>
+      <img className="Header__logo" src="sw-logo-icon2x.png" alt="CaveWire"/><span className="Header__title">CaveWire</span>
     </div>
   )
 }
