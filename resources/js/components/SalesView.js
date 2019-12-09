@@ -29,8 +29,8 @@ export default class SalesView extends Component {
   }
 
   //TODO handle progressive load/pagination
-  loadTransactions(){
-    axios.get(`${this.props.endpoint}`, {timeout: 30000}) //30 sec timeout
+  loadTransactions(endpoint, filter){
+    axios.get(endpoint, {timeout: 30000}) //30 sec timeout
     .then(res => {
       // transform/validate data
       const transactions = res.data.map((e,i) => {
@@ -42,9 +42,7 @@ export default class SalesView extends Component {
       });
       
       this.setState({ 
-        Open: transactions.filter( sale => sale.status === "Open"),
-        Accepted: transactions.filter( sale => sale.status === "Accepted"),
-        Sold: transactions.filter( sale => sale.status === "Sold"),
+        [filter]: transactions,
         loading: false, //don't need the busy indicator, time to show the loaded data
        });
     })
@@ -55,14 +53,15 @@ export default class SalesView extends Component {
   }
 
   componentDidMount() {
-    this.loadTransactions(); //fetch transactions when component loaded
+    this.loadTransactions("api/transactions/Open", "Open"); //fetch first tab when component loaded
+    this.loadTransactions("api/transactions/Accepted", "Accepted"); //pre-fetch transactions 
+    this.loadTransactions("api/transactions/Sold", "Sold"); //pre-fetch transactions 
   }
 
   //when you switch tabs, you might switch endpoints and want to refresh the list
   componentDidUpdate(prevProps, prevState) {
-    const { endpoint } = this.props;
-    if(prevProps.endpoint !== endpoint){
-      this.loadTransactions();
+    if(this.state[this.props.filter].length === 0){
+      this.loadTransactions(this.props.endpoint, this.props.filter);
     }
 
   }
@@ -74,7 +73,6 @@ export default class SalesView extends Component {
 
     this.state[this.props.filter].splice(this.state[this.props.filter].findIndex( e => e.id === sale.id), 1);
     this.state[sale.status].push(sale); //order doesn't matter so stick it on the end
-
 
     this.setState({status : sale.status}); 
   }

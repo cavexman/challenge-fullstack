@@ -8,36 +8,31 @@ use DB;
 class SnapwireController extends Controller
 {  
   public function ingest(){
-    $sales = file_get_contents("sales.json");
-    if($sales){
-      $json = json_decode($sales);
-      foreach($json as $row){
-        $sql = "INSERT INTO sales VALUES
-        ('UA502', 'Bananas', 105, '1971-07-13', 'Comedy', '82 minutes');";
-      }
-    }
+    //todo
 
   }
 
-  public function testDBConnection(Request $request, $name){
-    $sql = "
-    select * from login.Login_Information A
-    left join login.Login_Samples B on A.COC_ID=B.COC_ID and A.Sample=B.Sample
-    left join login.Login_Subsets C on A.COC_ID=C.COC_ID and A.Subset=C.Subset
-    left join login.Login_Constituents D on C.COC_ID=D.COC_ID and C.Subset=D.Subset
-    left join results.Release_Results E on D.COC_ID=E.COC_ID and E.Chem_ID_Login=D.Chem_ID
-    where A.COC_ID like ? and C.Method=?
-    ";
 
-    $results = DB::select($sql, ['SP_1900%','Soil']);
-
-
-    $params = [
-        'name' => $name,
-        'results' => $results
-    ];
-
-    return view('hello')->with($params);
+  protected function read($filter){
+    $sales = array();
+    $query = "select * from sales where status = '$filter';";
+    $results = DB::select($query);
+    if($results){
+      foreach( $results as $row){
+        $sales [] = [
+          "name" => $row->name,
+          "imageUrl" => $row->imageUrl,
+          "status" => $row->status,
+          "price" => $row->price,
+          "transaction" => [
+            'buyerName' => $row->buyerName,
+            'salePrice' => $row->salePrice
+          ]
+        ];
+      }
+    }
+    return response(json_encode($sales), 200)
+    ->header('Content-Type', 'application/json');
   }
 
     // {
@@ -64,52 +59,15 @@ class SnapwireController extends Controller
   }
 
   public function open_sales(Request $request, $id=null){
-    $sales = file_get_contents( "sales.json");
-
-    if($sales){
-      return response($sales, 200)
-              ->header('Content-Type', 'application/json');
-    }
-    else{
-      return response()->json(['msg'=>'cannot read sales']);
-    }
+    return $this->read("Open");
   }
     
 
-  //we would be better off decode json and normalizing it in the db at ingest time
   public function accepted_sales(Request $request, $id=null){
-    $sales = array();
-    $query = "select * from sales where j @> '{\"status\":\"Accepted\"}';";
-    $results = DB::select($query);
-    if($results){
-      $rows = array_column($results, 'j');
-      //psql is giving us an array of objects represented as json strings 
-      //we really want to return a json document that is an array of all rows
-      //so we need to iterate the rows and add to a single coherent array
-      //TODO need to see if we can get psql to return a single json document to a query
-      foreach( $rows as $row){
-        $sales [] = json_decode($row, true);//tempting to just stack the strings into the document and skip this encode/decode
-      }
-    }
-    return response(json_encode($sales), 200)
-    ->header('Content-Type', 'application/json');
+   return $this->read("Accepted");
   }
 
   public function sold_sales(Request $request, $id=null){
-    $sales = array();
-    $query = "select * from sales where j @> '{\"status\":\"Sold\"}';";
-    $results = DB::select($query);
-    if($results){
-      $rows = array_column($results, 'j');
-      //psql is giving us an array of objects represented as json strings 
-      //we really want to return a json document that is an array of all rows
-      //so we need to iterate the rows and add to a single coherent array
-      //TODO need to see if we can get psql to return a single json document to a query
-      foreach( $rows as $row){
-        $sales [] = json_decode($row, true);//tempting to just stack the strings into the document and skip this encode/decode
-      }
-    }
-    return response(json_encode($sales), 200)
-    ->header('Content-Type', 'application/json');
+    return $this->read("Sold");
   }
 }

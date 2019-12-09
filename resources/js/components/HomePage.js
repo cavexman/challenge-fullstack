@@ -39,14 +39,14 @@ export default class HomePage extends Component {
     const views = {
       Open: {
         component: SalesView,
-        endpoint: "/sales.json",
+        endpoint: "/api/transactions/Open",
         filter: "Open",
         button_label: "Accept",
         nextStatus: "Accepted"
       },
       Accepted: {
         component: SalesView,    //react component as parent view
-        endpoint: "/sales.json", //endpoint to load the view list
+        endpoint: "/api/transactions/Accepted", //endpoint to load the view list
         filter: "Accepted",      //limit the view to transacations that match this status
         button_label: "Sell",    //to advance the transaction to next state, click this button
         nextStatus: "Sold"       //new state for transaction after clicking commit button
